@@ -92,7 +92,8 @@ Select a topic from the right panel or ask any question below!`,
     setIsLoading(true);
 
     try {
-      const response = await fetch('/api/tutor/chat', {
+      const apiBase = (import.meta.env.VITE_API_URL || '').replace(/\/+$/, '');
+      const response = await fetch(`${apiBase}/api/tutor/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

@@ -28,7 +28,24 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Enable CORS for Vercel and cross-origin frontend clients
+app.use((_req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  if (_req.method === 'OPTIONS') {
+    res.sendStatus(200);
+    return;
+  }
+  next();
+});
+
 app.use(express.json({ limit: '10mb' }));
+
+// Health check endpoint for Render deployment monitoring
+app.get('/api/health', (_req, res) => {
+  res.json({ status: 'ok', service: 'Smart-AI-Tutor-Backend', timestamp: Date.now() });
+});
 
 // In-Memory Database for backend persistence
 interface UserRecord {
@@ -550,11 +567,11 @@ Guidelines:
 
     const candidateModels = Array.from(
       new Set([
-        process.env.GEMINI_MODEL || 'gemini-3.8-flash',
+        process.env.GEMINI_MODEL || 'gemini-3.1-flash-lite',
+        'gemini-3.1-flash-lite',
+        'gemini-flash-lite-latest',
         'gemini-3.8-flash',
         'gemini-3.5-flash',
-        'gemini-3.1-flash-lite',
-        'gemini-flash-latest',
       ])
     );
 
@@ -565,7 +582,7 @@ Guidelines:
     for (const m of candidateModels) {
       try {
         const timeoutPromise = new Promise((_, reject) =>
-          setTimeout(() => reject(new Error(`Timeout on ${m}`)), 12000)
+          setTimeout(() => reject(new Error(`Timeout on ${m}`)), 10000)
         );
         response = await Promise.race([
           ai.models.generateContent({
