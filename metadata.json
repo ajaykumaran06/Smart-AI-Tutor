@@ -1,0 +1,6 @@
+{
+  "name": "AI Smart Compiler Tutor",
+  "description": "An AI-powered educational platform for mastering Compiler Design with interactive parse trees, grammar analysis, LL(1) simulator, full compiler pipeline, quizzes, and personalized tutoring.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
